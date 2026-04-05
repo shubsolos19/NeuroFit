@@ -50,6 +50,8 @@ function resizeCvs() {
   canvas.width  = video.videoWidth  || video.clientWidth;
   canvas.height = video.videoHeight || video.clientHeight;
 }
+window.addEventListener('resize', resizeCvs);
+
 
 // ── In-frame assessment ───────────────────────────────────────
 // Returns 'in' | 'partial' | 'out'
@@ -137,8 +139,10 @@ function estimatePose(lm) {
 
 // ── MediaPipe results callback ────────────────────────────────
 function onResults(results) {
-  resizeCvs();
+  // Clearing canvas at 30+ fps is necessary, but resizeCvs causes layout thrashing.
+  // We'll move resizeCvs to the camera start/resize event instead.
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
   const lm         = results.poseLandmarks || null;
   const frameState = assessFrame(lm);
@@ -196,10 +200,10 @@ function onResults(results) {
 // ── Countdown ─────────────────────────────────────────────────
 function beginCountdown() {
   if (scanning) return;
-  console.log("🤖 [Vision ML] beginCountdown(): Initiating constant pose-tracking for 5 seconds...");
   scanning  = true;
   countdown = SCAN_SECS;
   readings  = [];
+
 
   const ring    = document.getElementById('countdown-ring');
   const ringFg  = document.getElementById('ring-fg');
@@ -237,18 +241,17 @@ function beginCountdown() {
 // ── MediaPipe init ────────────────────────────────────────────
 function initPose() {
   try {
-    console.log("🤖 [Vision ML] initPose(): Loading and initializing MediaPipe Pose model...");
     poseDetector = new Pose({
       locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${f}`
     });
     poseDetector.setOptions({
-      modelComplexity:        1,
-      smoothLandmarks:        true,
-      enableSegmentation:     false,
+      modelComplexity: 1, // Already at minimum
+      smoothLandmarks: true,
       minDetectionConfidence: 0.5,
-      minTrackingConfidence:  0.5,
+      minTrackingConfidence: 0.5,
     });
     poseDetector.onResults(onResults);
+
 
     camUtil = new Camera(video, {
       onFrame: async () => { if (poseDetector) await poseDetector.send({ image: video }); },

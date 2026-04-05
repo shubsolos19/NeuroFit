@@ -45,9 +45,10 @@ const _WEIGHT_TABLE = _buildWeightTable();
  * height and gender, based on the reference data table.
  */
 function lookupWeight(heightCm, gender) {
-  console.log("📊 [ML Model] Weight Lookup: Searching for reference weight at " + heightCm + "cm...");
   const cm      = Math.round(heightCm);
+
   const clamped = Math.max(120, Math.min(200, cm));
+
   const row     = _WEIGHT_TABLE[clamped];
   if (!row) return null;
   return {
