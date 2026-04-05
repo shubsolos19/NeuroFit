@@ -153,6 +153,30 @@ const scrollObs = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.fade-in').forEach(el => scrollObs.observe(el));
 
+// ── Navbar burger menu ────────────────────────────────────────
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('nav-links');
+const links = document.querySelectorAll('.nav-links li');
+
+if (burger) {
+  burger.addEventListener('click', () => {
+    // Toggle Nav
+    navLinks.classList.toggle('active');
+    
+    // Burger Animation
+    burger.classList.toggle('active');
+  });
+}
+
+// Close menu on click of links
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+    burger.classList.remove('active');
+  });
+});
+
 // ── Expose to global scope ────────────────────────────────────
 window.finalizeResults = finalizeResults;
 window.selectDiet      = selectDiet;
+
