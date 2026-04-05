@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroFit AI — Know Your Body</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+  <nav>
+    <div class="logo">NEUROFIT</div>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#scanner">Scanner</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a href="#scanner" class="nav-cta">Try Now</a>
+  </nav>
+
+  <!-- ============================================================
+     HERO
+     ============================================================ -->
+  <section id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <p class="hero-eyebrow">AI-Powered Body Analysis</p>
+    <h1 class="hero-title">KNOW YOUR<br /><span>BODY</span></h1>
+    <p class="hero-sub">Instant height, weight &amp; body composition analysis using just your webcam. Get personalized
+      meal and workout plans in seconds.</p>
+    <a href="#scanner" class="hero-btn">Start Body Scan ↓</a>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">5s</div>
+        <div class="lbl">Scan Time</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">±3cm</div>
+        <div class="lbl">Height Accuracy</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">3</div>
+        <div class="lbl">Body Types</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     HOW IT WORKS
+     ============================================================ -->
+  <section id="how">
+    <div class="section-inner">
+      <p class="section-tag fade-in">Process</p>
+      <h2 class="section-title fade-in">HOW IT<br />WORKS</h2>
+      <p class="section-sub fade-in">Four steps from your webcam to a complete personalised health plan.</p>
+      <div class="steps">
+        <div class="step fade-in">
+          <div class="step-num">01</div>
+          <div class="step-icon">📸</div>
+          <h3>Stand in Frame</h3>
+          <p>Position yourself within the guide box — full body visible, feet to head.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">02</div>
+          <div class="step-icon">🤖</div>
+          <h3>AI Measures You</h3>
+          <p>Our AI maps 33 body landmarks in real time across 5 seconds.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">03</div>
+          <div class="step-icon">📊</div>
+          <h3>Get Your Profile</h3>
+          <p>Height, weight, BMI, body type — all estimated from your proportions.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">04</div>
+          <div class="step-icon">🥗</div>
+          <h3>Your Plan</h3>
+          <p>ML model generates a custom meal plan and exercise routine for your body type.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SCANNER
+     ============================================================ -->
+  <section id="scanner">
+    <div class="section-inner">
+      <p class="section-tag fade-in">Body Scanner</p>
+      <h2 class="section-title fade-in">SCAN YOUR<br />BODY</h2>
+      <p class="section-sub fade-in">Stand 1.5–2 metres from camera. Wear fitted clothing. Keep full body in the guide
+        box.</p>
+
+      <div class="scanner-layout">
+
+        <!-- Camera feed -->
+        <div class="cam-box fade-in">
+          <div class="cam-inner">
+            <video id="webcam" autoplay playsinline muted></video>
+            <canvas id="overlay"></canvas>
+            <div class="cam-hud">
+              <div id="frame-banner" class="out">⬤ &nbsp;Step into the guide box</div>
+              <div class="guide-box bad" id="guide-box">
+                <span class="guide-label">KEEP FULL BODY IN FRAME</span>
+              </div>
+            </div>
+            <svg id="countdown-ring" width="100" height="100" viewBox="0 0 100 100">
+              <circle class="ring-bg" cx="50" cy="50" r="40" />
+              <circle class="ring-fg" id="ring-fg" cx="50" cy="50" r="40" />
+              <text class="ring-num" id="ring-num" x="50" y="50">5</text>
+            </svg>
+          </div>
+          <div class="cam-status">
+            <div class="status-dot" id="sdot"></div>
+            <span id="stxt">Click "Start Scan" to begin</span>
+          </div>
+        </div>
+
+        <!-- Controls panel -->
+        <div class="control-panel fade-in">
+
+          <div class="panel-card">
+            <h3>Camera Setup</h3>
+            <div class="slider-row">
+              <label>Camera height</label>
+              <input type="range" min="60" max="200" value="120" id="cam-h"
+                oninput="document.getElementById('camhv').textContent=this.value+'cm'" />
+              <span id="camhv">120cm</span>
+            </div>
+            <div class="slider-row">
+              <label>Distance to camera</label>
+              <input type="range" min="100" max="300" value="175" id="dist"
+                oninput="document.getElementById('distv').textContent=this.value+'cm'" />
+              <span id="distv">175cm</span>
+            </div>
+            <div class="slider-row">
+              <label>Gender</label>
+              <select id="gender" style="margin-top:0;flex:1;">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              <span></span>
+            </div>
+            <div class="slider-row">
+              <label>Age</label>
+              <input type="range" min="10" max="90" value="25" id="age"
+                oninput="document.getElementById('agev').textContent=this.value+'yr'" />
+              <span id="agev">25yr</span>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <h3>Scan Controls</h3>
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">
+              Once your full body is in the guide box, the 5-second scan starts automatically.
+            </p>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="btn-start">▶ Start Scan</button>
+              <button class="btn btn-secondary" id="btn-stop" disabled>Stop</button>
+            </div>
+          </div>
+
+          <div class="panel-card" id="live-panel" style="display:none;">
+            <h3>Live Readings</h3>
+            <div style="display:flex;gap:1rem;">
+              <div style="flex:1;text-align:center;">
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;">HEIGHT</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--accent);" id="live-h">--
+                </div>
+                <div style="font-size:0.7rem;color:var(--muted);">cm</div>
+              </div>
+              <div style="flex:1;text-align:center;">
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;">REF. WEIGHT</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--accent2);" id="live-w">--
+                </div>
+                <div style="font-size:0.7rem;color:var(--muted);">kg</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     RESULTS
+     ============================================================ -->
+  <section id="results-section">
+    <div class="section-inner">
+      <p class="section-tag">Your Results</p>
+      <h2 class="section-title">YOUR BODY<br />PROFILE</h2>
+
+      <!-- 01 — Scan Measurements + BMI -->
+      <div class="result-block">
+        <div class="result-block-header">
+          <span class="result-step">01</span>
+          <span class="result-block-title">SCAN MEASUREMENTS</span>
+        </div>
+        <div class="results-grid" id="results-grid"></div>
+        <div class="bmi-wrap" style="margin-top:1.5rem;">
+          <div
+            style="font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;">
+            Body Mass Index</div>
+          <div class="bmi-bar-track">
+            <div class="bmi-needle" id="bmi-needle" style="left:0%"></div>
+          </div>
+          <div class="bmi-scale">
+            <span>15 Underweight</span><span>18.5</span><span>25 Normal</span><span>30 Obese</span><span>40+</span>
+          </div>
+          <div class="bmi-result-text" id="bmi-text"></div>
+        </div>
+      </div>
+
+      <!-- 02 — Body Type -->
+      <div class="result-block">
+        <div class="result-block-header">
+          <span class="result-step">02</span>
+          <span class="result-block-title">YOUR BODY TYPE</span>
+        </div>
+        <div class="body-types">
+          <div class="btype-card" id="bt-ecto">
+            <div class="btype-fig">🦒</div>
+            <div class="btype-name">ECTOMORPH</div>
+            <div class="btype-sub">Slim &amp; Lean</div>
+            <div class="btype-traits">Fast metabolism &middot; Thin frame &middot; Difficulty gaining muscle</div>
+          </div>
+          <div class="btype-card" id="bt-meso">
+            <div class="btype-fig">💪</div>
+            <div class="btype-name">MESOMORPH</div>
+            <div class="btype-sub">Athletic &amp; Muscular</div>
+            <div class="btype-traits">Moderate metabolism &middot; Gains muscle easily &middot; Naturally athletic</div>
+          </div>
+          <div class="btype-card" id="bt-endo">
+            <div class="btype-fig">🧸</div>
+            <div class="btype-name">ENDOMORPH</div>
+            <div class="btype-sub">Rounder &amp; Stocky</div>
+            <div class="btype-traits">Slow metabolism &middot; Stores fat easily &middot; High strength potential</div>
+          </div>
+        </div>
+        <div class="btype-insight" id="btype-insight"></div>
+      </div>
+
+      <!-- 03 — Exercises -->
+      <div class="result-block">
+        <div class="result-block-header">
+          <span class="result-step">03</span>
+          <span class="result-block-title">OPTIMAL EXERCISES FOR YOUR TYPE</span>
+        </div>
+        <div class="exercise-grid" id="exercise-grid"></div>
+      </div>
+
+      <!-- 04 — ML Meals -->
+      <div class="result-block">
+        <div class="result-block-header">
+          <span class="result-step">04</span>
+          <span class="result-block-title">ML MEAL RECOMMENDATIONS</span>
+        </div>
+        <div class="diet-picker">
+          <span class="diet-picker-label">Dietary preference:</span>
+          <button class="diet-btn active" data-diet="non-veg" onclick="selectDiet(this)">Non-Veg</button>
+          <button class="diet-btn" data-diet="vegetarian" onclick="selectDiet(this)">Vegetarian</button>
+          <button class="diet-btn" data-diet="vegan" onclick="selectDiet(this)">Vegan</button>
+        </div>
+        <div id="meal-cards" class="meal-cards-grid"></div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:1rem;">
+          Meals ranked by JS ML model &mdash; scored by calorie proximity to your TDEE &amp; diet match.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+     ABOUT
+     ============================================================ -->
+  <section id="about">
+    <div class="section-inner">
+      <p class="section-tag fade-in">Technology</p>
+      <h2 class="section-title fade-in">BUILT ON<br />REAL SCIENCE</h2>
+      <div class="about-grid">
+        <div class="about-text fade-in">
+          <p>NeuroFit uses Google's MediaPipe Pose — the same technology powering professional sports analytics — to
+            detect 33 body landmarks with sub-pixel precision.</p>
+          <p>Height is calculated from head-to-ankle pixel span mapped to real-world scale using camera geometry and
+            your setup parameters.</p>
+          <p>Weight estimation uses a clinically-validated height/BMI lookup table. Note: weight shown is a healthy
+            reference value, not an actual measurement.</p>
+          <p>Meal recommendations come from a JS ML model ported from a Python Random Forest classifier, scoring 25
+            meals by calorie proximity, macro balance, and body-type cuisine preferences.</p>
+        </div>
+        <div class="about-features fade-in">
+          <div class="feat">
+            <div class="feat-icon">🔒</div>
+            <div>
+              <h4>100% Private</h4>
+              <p>All processing happens in your browser. No data leaves your device.</p>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon">⚡</div>
+            <div>
+              <h4>Real-time AI</h4>
+              <p>MediaPipe runs at 30fps, averaged across the 5-second window for accuracy.</p>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon">🎯</div>
+            <div>
+              <h4>Height ±3–8cm</h4>
+              <p>Calibrate camera height and distance for best precision.</p>
+            </div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon">🥗</div>
+            <div>
+              <h4>ML Meal Scoring</h4>
+              <p>Random Forest feature logic ported to JS — ranked meals per body type &amp; diet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     FOOTER
+     ============================================================ -->
+  <footer>
+    <div class="f-logo">NEUROFIT</div>
+    <p>AI-powered body analysis &middot; For wellness guidance only, not medical advice.</p>
+  </footer>
+
+  <!-- ============================================================
+     SCRIPTS — load order matters:
+     1. MediaPipe (external CDN)
+     2. Model layer  (data + algorithms)
+     3. Frontend layer (scanner, UI)
+     ============================================================ -->
+
+  <!-- MediaPipe -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+
+  <!-- Model layer -->
+  <script src="../model/bodyMetrics.js"></script>
+  <script src="../model/meals.js"></script>
+  <script src="../model/exercises.js"></script>
+
+  <!-- Frontend layer -->
+  <script src="js/ui.js"></script>
+  <script src="js/scanner.js"></script>
+
+</body>
+
+</html>
