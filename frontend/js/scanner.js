@@ -35,7 +35,8 @@ let inFrameFrames   = 0;
 let autoStarted     = false;
 
 const SCAN_SECS          = 5;
-const IN_FRAME_THRESHOLD = 8; // ~1 second of good frames before auto-start
+const IN_FRAME_THRESHOLD = 15; // ~0.5 second of good frames at 30fps
+
 
 // ── Status bar helper ─────────────────────────────────────────
 function setStatus(msg, state) {
@@ -174,9 +175,12 @@ function onResults(results) {
         beginCountdown();
       }
     } else {
-      if (inFrameFrames > 0) inFrameFrames = Math.max(0, inFrameFrames - 2);
+      // More forgiving decay: only decrement by 1 instead of 2.
+      // This helps with occasional tracking flickers in poor lighting.
+      if (inFrameFrames > 0) inFrameFrames--;
     }
   }
+
 
   if (scanning) {
     if (lm) {
@@ -219,10 +223,16 @@ function beginCountdown() {
       clearInterval(cTimer); cTimer = null;
       scanning = false;
       ring.style.display = 'none';
+      
+      // Allow auto-start to trigger again if the user stays in frame for another measurement
+      autoStarted = false; 
+      inFrameFrames = 0;
+      
       window.finalizeResults(readings); // defined in ui.js
     }
   }, 1000);
 }
+
 
 // ── MediaPipe init ────────────────────────────────────────────
 function initPose() {
