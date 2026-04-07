@@ -121,7 +121,7 @@
             <video id="webcam" autoplay playsinline muted></video>
             <canvas id="overlay"></canvas>
             <div class="cam-hud">
-              <div id="frame-banner" class="out">⬤ &nbsp;Step into the guide box</div>
+              <div id="frame-banner" class="frame-banner out">⬤ &nbsp;Step into the guide box</div>
               <div class="guide-box bad" id="guide-box">
                 <span class="guide-label">KEEP FULL BODY IN FRAME</span>
               </div>
@@ -360,10 +360,12 @@
      3. Frontend layer (scanner, UI)
      ============================================================ -->
 
-  <!-- MediaPipe -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <!-- MediaPipe (pinned versions — do NOT remove version numbers) -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1675466124/drawing_utils.js"
+    crossorigin="anonymous"></script>
 
   <!-- Model layer -->
   <script src="../model/bodyMetrics.js"></script>
